@@ -154,29 +154,314 @@
           <div class="contact-card"><span class="contact-mark">S</span><div><strong>SleepSync Signature Store</strong><small>Franchise enquiries · Kerala</small><a href="https://thesleepsync.com" target="_blank" rel="noopener">thesleepsync.com ↗</a></div></div>
         </div>
         <div class="form-card reveal">
-          <div class="form-progress"><span class="progress-step active" data-progress="1">01 Your details</span><span class="progress-step" data-progress="2">02 Business profile</span></div>
+          <div class="form-progress" role="tablist" aria-label="Franchise form steps">
+            <span class="progress-step active" data-progress="1" role="tab" aria-selected="true" tabindex="0">01 About You</span>
+            <span class="progress-step" data-progress="2" role="tab" aria-selected="false" tabindex="0">02 Current Business</span>
+            <span class="progress-step" data-progress="3" role="tab" aria-selected="false" tabindex="0">03 Proposed Store</span>
+            <span class="progress-step" data-progress="4" role="tab" aria-selected="false" tabindex="0">04 Investment &amp; Consent</span>
+          </div>
+
           <form id="franchise-form" novalidate>
+            <!-- ================= STEP 1: SECTION A - ABOUT YOU ================= -->
             <div class="form-step active" data-step="1">
-              <h3>Let's get acquainted.</h3><p class="form-subtitle">Your contact details help us follow up with you.</p>
-              <div class="field"><label for="fullName">Full name <span>*</span></label><input id="fullName" name="fullName" autocomplete="name" required placeholder="Your full name"></div>
-              <div class="field"><label for="mobile">Mobile number <span>*</span></label><input id="mobile" name="mobile" type="tel" inputmode="tel" autocomplete="tel" required pattern="[+0-9() -]{8,18}" placeholder="+91 98765 43210"></div>
-              <div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" placeholder="you@business.com"></div>
-              <div class="field"><label for="businessName">Business name <span>*</span></label><input id="businessName" name="businessName" autocomplete="organization" required placeholder="Your showroom or company"></div>
-              <button class="button button-primary button-full" type="button" data-next>Continue to business profile <span aria-hidden="true">→</span></button>
-              <p class="form-privacy">Your information will be used to respond to this franchise enquiry.</p>
+              <span class="section-tag">Section A · About You</span>
+              <h3>Personal &amp; business details</h3>
+              <p class="form-subtitle">Please complete all fields to help us review your franchise enquiry.</p>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="fullName">Full name <span>*</span></label>
+                  <input id="fullName" name="fullName" autocomplete="name" required placeholder="Your full name">
+                </div>
+                <div class="field">
+                  <label for="designation">Designation <span>*</span></label>
+                  <input id="designation" name="designation" required placeholder="e.g. Proprietor / Managing Partner">
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="mobile">Mobile number <span>*</span></label>
+                  <input id="mobile" name="mobile" type="tel" inputmode="tel" autocomplete="tel" required pattern="[+0-9() -]{8,18}" placeholder="+91 98765 43210">
+                </div>
+                <div class="field">
+                  <label for="whatsapp">WhatsApp number <span>*</span></label>
+                  <input id="whatsapp" name="whatsapp" type="tel" inputmode="tel" required pattern="[+0-9() -]{8,18}" placeholder="+91 98765 43210">
+                  <label class="helper-check" for="sameWhatsapp">
+                    <input type="checkbox" id="sameWhatsapp">
+                    <span>Same as mobile number</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="email">Email address <span>*</span></label>
+                  <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@business.com">
+                </div>
+                <div class="field">
+                  <label for="businessName">Business name <span>*</span></label>
+                  <input id="businessName" name="businessName" autocomplete="organization" required placeholder="Showroom / Company name">
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Constitution <span>*</span></label>
+                <div class="choice-pills">
+                  <label class="choice-pill"><input type="radio" name="constitution" value="Proprietorship" required checked> Proprietorship</label>
+                  <label class="choice-pill"><input type="radio" name="constitution" value="Partnership"> Partnership</label>
+                  <label class="choice-pill"><input type="radio" name="constitution" value="LLP"> LLP</label>
+                  <label class="choice-pill"><input type="radio" name="constitution" value="Private Ltd"> Private Ltd</label>
+                  <label class="choice-pill"><input type="radio" name="constitution" value="Other"> Other</label>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="address">Address <span>*</span></label>
+                <input id="address" name="address" autocomplete="street-address" required placeholder="Showroom / Office physical address">
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="town">Town / City <span>*</span></label>
+                  <input id="town" name="town" required placeholder="e.g. Kochi">
+                </div>
+                <div class="field">
+                  <label for="district">District <span>*</span></label>
+                  <input id="district" name="district" required placeholder="e.g. Ernakulam">
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="gstin">GSTIN</label>
+                  <input id="gstin" name="gstin" placeholder="15-digit GSTIN (optional if not registered)">
+                </div>
+                <div class="field">
+                  <label for="yearsInBusiness">Years in business <span>*</span></label>
+                  <input id="yearsInBusiness" name="yearsInBusiness" type="number" min="0" max="100" required placeholder="e.g. 10">
+                </div>
+              </div>
+
+              <div class="form-step-actions">
+                <button class="button button-primary button-full" type="button" data-next>Continue to current business <span aria-hidden="true">→</span></button>
+              </div>
+              <p class="form-privacy">Your details are strictly kept confidential and used only for franchise evaluation.</p>
             </div>
+
+            <!-- ================= STEP 2: SECTION B - YOUR CURRENT BUSINESS ================= -->
             <div class="form-step" data-step="2">
-              <h3>Tell us about your business.</h3><p class="form-subtitle">These details help us understand your current setup.</p>
-              <div class="field"><label for="businessType">Current business <span>*</span></label><select id="businessType" name="businessType" required><option value="">Choose one</option><option>Furniture</option><option>Mattresses</option><option>Furnishings</option><option>Home appliances</option><option>Other / not yet operating</option></select></div>
-              <div class="field"><label for="district">Town / district <span>*</span></label><input id="district" name="district" required placeholder="e.g. Ernakulam"></div>
-              <div class="field"><label for="showroomArea">Available showroom area <span>*</span></label><select id="showroomArea" name="showroomArea" required><option value="">Choose area</option><option>Below 600 sq ft</option><option>600–1,000 sq ft</option><option>Above 1,000 sq ft</option><option>Not yet identified</option></select></div>
-              <div class="field"><label for="capital">Investment capacity <span>*</span></label><select id="capital" name="capital" required><option value="">Choose a range</option><option>Below ₹15 lakh</option><option>₹15–20 lakh</option><option>₹20–30 lakh</option><option>Above ₹30 lakh</option></select></div>
-              <div class="field"><label for="timeline">Target opening <span>*</span></label><select id="timeline" name="timeline" required><option value="">Choose timing</option><option>Within 3 months</option><option>3–6 months</option><option>6–12 months</option><option>Exploring</option></select></div>
-              <div class="field"><label for="comments">Questions or comments</label><textarea id="comments" name="comments" rows="3" placeholder="Tell us anything else we should know"></textarea></div>
-              <label class="consent"><input type="checkbox" name="consent" id="consent" required><span>I agree that SleepSync may contact me about this franchise enquiry and process my information as described in its privacy policy. <span class="required">*</span></span></label>
-              <div class="form-actions"><button class="button button-ghost-dark" type="button" data-back>← Back</button><button class="button button-primary" type="submit">Submit enquiry <span aria-hidden="true">↗</span></button></div>
+              <span class="section-tag">Section B · Your Current Business</span>
+              <h3>Current retail footprint</h3>
+              <p class="form-subtitle">Details about your existing showroom operations and logistics.</p>
+
+              <div class="field">
+                <label>Current business (tick all that apply) <span>*</span></label>
+                <div class="choice-pills">
+                  <label class="choice-pill"><input type="checkbox" name="currentBusiness" value="Furniture" checked> Furniture</label>
+                  <label class="choice-pill"><input type="checkbox" name="currentBusiness" value="Furnishings"> Furnishings</label>
+                  <label class="choice-pill"><input type="checkbox" name="currentBusiness" value="Mattresses"> Mattresses</label>
+                  <label class="choice-pill"><input type="checkbox" name="currentBusiness" value="Home appliances"> Home appliances</label>
+                  <label class="choice-pill"><input type="checkbox" name="currentBusiness" value="Other / none"> Other / none</label>
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="showroomArea">Showroom area <span>*</span></label>
+                  <div class="input-with-unit">
+                    <input id="showroomArea" name="showroomArea" type="number" min="0" required placeholder="e.g. 4500">
+                    <span class="unit">sq ft</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="staffCount">Number of staff <span>*</span></label>
+                  <input id="staffCount" name="staffCount" type="number" min="0" required placeholder="e.g. 8">
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Annual turnover <span>*</span></label>
+                <div class="choice-pills">
+                  <label class="choice-pill"><input type="radio" name="annualTurnover" value="Below ₹1 Cr" required checked> Below ₹1 Cr</label>
+                  <label class="choice-pill"><input type="radio" name="annualTurnover" value="₹1–3 Cr"> ₹1–3 Cr</label>
+                  <label class="choice-pill"><input type="radio" name="annualTurnover" value="₹3–10 Cr"> ₹3–10 Cr</label>
+                  <label class="choice-pill"><input type="radio" name="annualTurnover" value="Above ₹10 Cr"> Above ₹10 Cr</label>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="mattressBrands">Mattress brands sold now</label>
+                <input id="mattressBrands" name="mattressBrands" placeholder="Brands currently retailed (or 'None')">
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label>Own delivery vehicle? <span>*</span></label>
+                  <div class="choice-pills">
+                    <label class="choice-pill"><input type="radio" name="deliveryVehicle" value="Yes" required checked> Yes</label>
+                    <label class="choice-pill"><input type="radio" name="deliveryVehicle" value="No"> No</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>Delivery team? <span>*</span></label>
+                  <div class="choice-pills">
+                    <label class="choice-pill"><input type="radio" name="deliveryTeam" value="Yes" required checked> Yes</label>
+                    <label class="choice-pill"><input type="radio" name="deliveryTeam" value="No"> No</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-step-actions">
+                <button class="button button-ghost-dark" type="button" data-back>← Back</button>
+                <button class="button button-primary" type="button" data-next>Continue to proposed store <span aria-hidden="true">→</span></button>
+              </div>
+            </div>
+
+            <!-- ================= STEP 3: SECTION C - THE PROPOSED SIGNATURE STORE ================= -->
+            <div class="form-step" data-step="3">
+              <span class="section-tag">Section C · Proposed Signature Store</span>
+              <h3>Proposed showroom space</h3>
+              <p class="form-subtitle">Tell us about the space you intend to allocate for SleepSync.</p>
+
+              <div class="field">
+                <label>Location <span>*</span></label>
+                <div class="choice-pills">
+                  <label class="choice-pill"><input type="radio" name="locationType" value="Within my showroom" required checked> Within my showroom</label>
+                  <label class="choice-pill"><input type="radio" name="locationType" value="Adjacent unit"> Adjacent unit</label>
+                  <label class="choice-pill"><input type="radio" name="locationType" value="New premises"> New premises</label>
+                  <label class="choice-pill"><input type="radio" name="locationType" value="Not yet identified"> Not yet identified</label>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="spaceAddress">Address of space</label>
+                <input id="spaceAddress" name="spaceAddress" placeholder="Address / Landmark (or 'Same as showroom')">
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="proposedArea">Area available <span>*</span></label>
+                  <div class="input-with-unit">
+                    <input id="proposedArea" name="proposedArea" type="number" min="0" required placeholder="e.g. 800 (suggested 600–1,000)">
+                    <span class="unit">sq ft</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="floor">Floor <span>*</span></label>
+                  <input id="floor" name="floor" required placeholder="e.g. Ground Floor / 1st Floor">
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label>Premises <span>*</span></label>
+                  <div class="choice-pills">
+                    <label class="choice-pill"><input type="radio" name="premises" value="Owned" required checked> Owned</label>
+                    <label class="choice-pill"><input type="radio" name="premises" value="Leased"> Leased</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="leaseYears">Lease years remaining</label>
+                  <input id="leaseYears" name="leaseYears" placeholder="e.g. 5 years (or N/A if owned)">
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="territory">Territory of interest <span>*</span></label>
+                <input id="territory" name="territory" required placeholder="e.g. Ernakulam Central, Calicut, Thrissur">
+              </div>
+
+              <div class="form-step-actions">
+                <button class="button button-ghost-dark" type="button" data-back>← Back</button>
+                <button class="button button-primary" type="button" data-next>Continue to investment &amp; timing <span aria-hidden="true">→</span></button>
+              </div>
+            </div>
+
+            <!-- ================= STEP 4: SECTIONS D & E - INVESTMENT, TIMING & DECLARATION ================= -->
+            <div class="form-step" data-step="4">
+              <span class="section-tag">Section D &amp; E · Investment &amp; Consent</span>
+              <h3>Investment &amp; next steps</h3>
+              <p class="form-subtitle">Final details to complete your franchise expression of interest.</p>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="capitalAvailable">Capital available <span>*</span></label>
+                  <select id="capitalAvailable" name="capitalAvailable" required>
+                    <option value="">Select range</option>
+                    <option>Below ₹15 L</option>
+                    <option>₹15–20 L</option>
+                    <option>₹20–30 L</option>
+                    <option>Above ₹30 L</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="sourceOfFunds">Source of funds <span>*</span></label>
+                  <select id="sourceOfFunds" name="sourceOfFunds" required>
+                    <option value="">Select source</option>
+                    <option>Own funds</option>
+                    <option>Bank finance</option>
+                    <option>Both</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="storeManager">Who will run the store <span>*</span></label>
+                  <select id="storeManager" name="storeManager" required>
+                    <option value="">Select option</option>
+                    <option>Myself, full-time</option>
+                    <option>Myself, part-time</option>
+                    <option>A family member</option>
+                    <option>A manager</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="targetOpening">Target opening <span>*</span></label>
+                  <select id="targetOpening" name="targetOpening" required>
+                    <option value="">Select timing</option>
+                    <option>Within 3 months</option>
+                    <option>3–6 months</option>
+                    <option>6–12 months</option>
+                    <option>Exploring</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="hearAboutUs">How did you hear of us <span>*</span></label>
+                <select id="hearAboutUs" name="hearAboutUs" required>
+                  <option value="">Select an option</option>
+                  <option>SleepSync team</option>
+                  <option>Website</option>
+                  <option>Social media</option>
+                  <option>Referral</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="comments">Questions or comments</label>
+                <textarea id="comments" name="comments" rows="3" placeholder="Tell us anything else we should know about your showroom or timeline"></textarea>
+              </div>
+
+              <div class="consent-box">
+                <label class="consent" for="consent">
+                  <input type="checkbox" name="consent" id="consent" required>
+                  <span class="consent-text">
+                    <strong>Declaration and consent:</strong> I confirm the information above is true to the best of my knowledge. I understand this form is an expression of interest only and creates no obligation on either party. I consent to SleepSync using these details to contact me about the franchise, to verify the information provided, and to assess my application, in line with the Digital Personal Data Protection Act, 2023. I may withdraw this consent at any time by writing to SleepSync. <span class="required">*</span>
+                  </span>
+                </label>
+              </div>
+
+              <div class="form-step-actions">
+                <button class="button button-ghost-dark" type="button" data-back>← Back</button>
+                <button class="button button-primary" type="submit">Submit franchise enquiry <span aria-hidden="true">↗</span></button>
+              </div>
               <p class="form-privacy">Submitting this form is an expression of interest only and creates no obligation on either party.</p>
             </div>
+
             <div class="form-message" id="form-message" role="status" aria-live="polite"></div>
           </form>
         </div>

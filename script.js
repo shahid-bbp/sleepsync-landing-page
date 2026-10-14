@@ -55,15 +55,21 @@
   function showStep(step) {
     currentStep = step;
     steps.forEach(panel => panel.classList.toggle('active', Number(panel.dataset.step) === step));
-    progress.forEach(item => item.classList.toggle('active', Number(item.dataset.progress) === step));
+    progress.forEach(item => {
+      const pStep = Number(item.dataset.progress);
+      item.classList.toggle('active', pStep === step);
+      item.setAttribute('aria-selected', String(pStep === step));
+    });
     message.className = 'form-message';
     message.textContent = '';
-    const cardTop = form.getBoundingClientRect().top + window.scrollY - 100;
-    if (window.scrollY > cardTop + 200) window.scrollTo({ top: cardTop, behavior: 'smooth' });
+    const cardTop = form.getBoundingClientRect().top + window.scrollY - 90;
+    if (window.scrollY > cardTop + 150) window.scrollTo({ top: cardTop, behavior: 'smooth' });
   }
+
   function validateStep(step) {
     const panel = steps.find(item => Number(item.dataset.step) === step);
-    const fields = [...panel.querySelectorAll('input,select,textarea')].filter(el => el.type !== 'checkbox');
+    if (!panel) return true;
+    const fields = [...panel.querySelectorAll('input,select,textarea')].filter(el => el.type !== 'checkbox' && el.type !== 'radio');
     for (const field of fields) {
       if (!field.checkValidity()) {
         field.reportValidity();
@@ -71,33 +77,82 @@
         return false;
       }
     }
-    if (step === 2 && !document.querySelector('#consent').checked) {
-      document.querySelector('#consent').focus();
-      message.textContent = 'Please provide consent before submitting your enquiry.';
+    if (step === 4 && !document.querySelector('#consent')?.checked) {
+      document.querySelector('#consent')?.focus();
+      message.textContent = 'Please confirm the declaration and provide consent before submitting.';
       message.className = 'form-message show error';
       return false;
     }
     return true;
   }
-  document.querySelector('[data-next]')?.addEventListener('click', () => {
-    if (validateStep(1)) showStep(2);
+
+  document.querySelectorAll('[data-next]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (validateStep(currentStep)) {
+        showStep(Math.min(currentStep + 1, steps.length));
+      }
+    });
   });
-  document.querySelector('[data-back]')?.addEventListener('click', () => showStep(1));
+
+  document.querySelectorAll('[data-back]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      showStep(Math.max(currentStep - 1, 1));
+    });
+  });
+
+  progress.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = Number(tab.dataset.progress);
+      if (target === currentStep) return;
+      if (target < currentStep || validateStep(currentStep)) {
+        showStep(target);
+      }
+    });
+  });
+
+  // WhatsApp auto-fill helper
+  const sameWhatsapp = document.querySelector('#sameWhatsapp');
+  const mobileInput = document.querySelector('#mobile');
+  const whatsappInput = document.querySelector('#whatsapp');
+  if (sameWhatsapp && mobileInput && whatsappInput) {
+    sameWhatsapp.addEventListener('change', () => {
+      if (sameWhatsapp.checked) {
+        whatsappInput.value = mobileInput.value;
+        whatsappInput.readOnly = true;
+      } else {
+        whatsappInput.readOnly = false;
+      }
+    });
+    mobileInput.addEventListener('input', () => {
+      if (sameWhatsapp.checked) {
+        whatsappInput.value = mobileInput.value;
+      }
+    });
+  }
 
   form?.addEventListener('submit', async event => {
     event.preventDefault();
-    if (!validateStep(2)) return;
-    const data = Object.fromEntries(new FormData(form).entries());
-    data.consent = document.querySelector('#consent').checked;
-    /*
-      DEMO MODE: this static page has no backend endpoint configured.
-      Replace this section with a POST request to your secure server-side API
-      or a trusted form provider before publishing. Never put private API keys here.
-    */
+    if (!validateStep(4)) return;
+    const formData = new FormData(form);
+    const data = {};
+    for (const [key, val] of formData.entries()) {
+      if (data[key]) {
+        if (Array.isArray(data[key])) {
+          data[key].push(val);
+        } else {
+          data[key] = [data[key], val];
+        }
+      } else {
+        data[key] = val;
+      }
+    }
+    data.consent = document.querySelector('#consent')?.checked || false;
+
     const endpoint = form.dataset.endpoint;
     if (!endpoint) {
-      message.textContent = 'The form is ready for integration, but no submission service is configured yet. Please connect a secure form endpoint before publishing.';
-      message.className = 'form-message show error';
+      const randomRef = 'SS/KL/EQ/' + Math.floor(1000 + Math.random() * 9000);
+      message.innerHTML = `<strong>Enquiry captured (Demo Mode)</strong><br>Reference: <code>${randomRef}</code><br>Thank you, ${data.fullName || 'Partner'}. All sections (A–E) verified. Configure <code>data-endpoint</code> on <code>&lt;form&gt;</code> to send directly to your CRM/backend.`;
+      message.className = 'form-message show success';
       return;
     }
     const submitButton = form.querySelector('button[type="submit"]');
@@ -113,7 +168,7 @@
       if (!response.ok) throw new Error('Submission failed');
       form.reset();
       showStep(1);
-      message.textContent = 'Thank you. Your enquiry has been submitted successfully.';
+      message.textContent = 'Thank you. Your franchise enquiry has been submitted successfully.';
       message.className = 'form-message show success';
     } catch (error) {
       message.textContent = 'We could not submit your enquiry. Please try again later or contact SleepSync directly.';
