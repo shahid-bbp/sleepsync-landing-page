@@ -40,3 +40,26 @@
 .brand-logo{height:40px;width:auto;max-width:190px;object-fit:contain;display:block;transition:transform .2s}
 .brand:hover .brand-logo{transform:scale(1.02)}
 @media(max-width:760px){.brand-logo{height:32px;max-width:150px}}
+
+/* Collapsible Franchise Details Section */
+.details-toggle-section{background:var(--paper);padding:24px 0 16px;border-bottom:1px solid var(--line)}
+.details-toggle-bar{width:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;background:#f6f8fd;border:1px solid #dbe3f1;border-radius:14px;padding:16px 24px;cursor:pointer;transition:all .25s ease;font-family:inherit;color:var(--ink);text-align:left}
+.details-toggle-bar:hover{background:#eef3fc;border-color:#9bb7ff;box-shadow:0 6px 20px rgba(23,60,143,.08)}
+.toggle-bar-left{display:flex;align-items:center;gap:14px}
+.toggle-badge{font-size:9px;font-weight:800;letter-spacing:.15em;color:#fff;background:var(--blue);padding:5px 11px;border-radius:6px;flex-shrink:0}
+.toggle-bar-left strong{font-size:13px;font-weight:700;color:var(--ink)}
+.toggle-bar-action{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:800;color:var(--blue);flex-shrink:0}
+.toggle-bar-action .toggle-icon,.button .toggle-icon{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;font-style:normal;font-size:13px;transition:transform .3s ease,background .2s ease}
+.button-ghost .toggle-icon{background:#edf2fc;color:var(--blue)}
+.details-collapse{display:none}
+.details-collapse.is-open{display:block;animation:fadeInDetails .45s ease forwards}
+@keyframes fadeInDetails{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.details-collapse-footer{background:#f3f6fc;padding:32px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.footer-actions-inner{display:flex;align-items:center;justify-content:space-between;gap:20px}
+@media(max-width:760px){
+  .details-toggle-bar{flex-direction:column;align-items:flex-start;gap:12px;padding:14px 16px}
+  .toggle-bar-left{flex-direction:column;align-items:flex-start;gap:6px}
+  .toggle-bar-action{width:100%;justify-content:space-between;padding-top:8px;border-top:1px solid #e2e8f4}
+  .footer-actions-inner{flex-direction:column;align-items:stretch;gap:12px}
+  .footer-actions-inner .button{width:100%}
+}

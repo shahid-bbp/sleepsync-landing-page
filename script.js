@@ -52,6 +52,79 @@
     revealItems.forEach(item => item.classList.add('is-visible'));
   }
 
+  // Collapsible Franchise Details Section (Opportunity, Why SleepSync, Investment, How It Works)
+  const detailsContainer = document.querySelector('#franchise-details');
+  const toggleButtons = document.querySelectorAll('.toggle-details-btn');
+  const detailsNavLinks = document.querySelectorAll('a[href="#opportunity"], a[href="#benefits"], a[href="#investment"], a[href="#process"]');
+
+  function openDetails(targetAnchor = null) {
+    if (!detailsContainer) return;
+    detailsContainer.classList.add('is-open');
+    detailsContainer.setAttribute('aria-hidden', 'false');
+    toggleButtons.forEach(btn => {
+      btn.setAttribute('aria-expanded', 'true');
+      const textSpan = btn.querySelector('.btn-text');
+      if (textSpan) {
+        textSpan.textContent = btn.classList.contains('button-ghost-dark') ? 'Close franchise details' : 'Hide details';
+      }
+      const icon = btn.querySelector('.toggle-icon');
+      if (icon) icon.textContent = '↑';
+    });
+    detailsContainer.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
+
+    if (targetAnchor) {
+      setTimeout(() => {
+        const el = document.querySelector(targetAnchor);
+        if (el) {
+          const top = el.getBoundingClientRect().top + window.scrollY - 85;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      }, 60);
+    }
+  }
+
+  function closeDetails() {
+    if (!detailsContainer) return;
+    detailsContainer.classList.remove('is-open');
+    detailsContainer.setAttribute('aria-hidden', 'true');
+    toggleButtons.forEach(btn => {
+      btn.setAttribute('aria-expanded', 'false');
+      const textSpan = btn.querySelector('.btn-text');
+      if (textSpan) textSpan.textContent = 'Know more';
+      const icon = btn.querySelector('.toggle-icon');
+      if (icon) icon.textContent = '↓';
+    });
+    const toggleSection = document.querySelector('.details-toggle-section');
+    if (toggleSection) {
+      const top = toggleSection.getBoundingClientRect().top + window.scrollY - 85;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  }
+
+  toggleButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isOpen = detailsContainer?.classList.contains('is-open');
+      if (isOpen) {
+        closeDetails();
+      } else {
+        openDetails('#opportunity');
+      }
+    });
+  });
+
+  detailsNavLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        if (!detailsContainer?.classList.contains('is-open')) {
+          e.preventDefault();
+          openDetails(href);
+        }
+      }
+    });
+  });
+
   function showStep(step) {
     currentStep = step;
     steps.forEach(panel => panel.classList.toggle('active', Number(panel.dataset.step) === step));

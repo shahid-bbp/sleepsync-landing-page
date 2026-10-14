@@ -47,8 +47,10 @@
           <h1>Bring better sleep.<br><span>Grow your business.</span></h1>
           <p class="hero-lead">Add a dedicated SleepSync Signature Store to your existing showroom and build a focused sleep business with a brand engineered around better rest.</p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#enquiry">Explore the opportunity <span aria-hidden="true">↗</span></a>
-            <a class="button button-ghost" href="#benefits">Discover the benefits</a>
+            <a class="button button-primary" href="#enquiry">Enquire now <span aria-hidden="true">↗</span></a>
+            <button class="button button-ghost toggle-details-btn" type="button" aria-expanded="false" aria-controls="franchise-details">
+              <span class="btn-text">Know more</span> <span class="toggle-icon" aria-hidden="true">↓</span>
+            </button>
           </div>
           <div class="hero-proof">
             <div class="proof-icon" aria-hidden="true">25<span>+</span></div>
@@ -64,7 +66,7 @@
           <div class="decor-ring" aria-hidden="true"></div>
         </div>
       </div>
-      <div class="container hero-bottom"><span>AN OPPORTUNITY FOR ESTABLISHED RETAILERS</span><span class="scroll-cue">SCROLL TO EXPLORE <i aria-hidden="true">↓</i></span></div>
+      <div class="container hero-bottom"><span>AN OPPORTUNITY FOR ESTABLISHED RETAILERS</span><button class="scroll-cue toggle-details-btn" type="button" aria-expanded="false" aria-controls="franchise-details" style="background:none;border:none;cursor:pointer;font:inherit;color:inherit;padding:0">KNOW MORE &amp; EXPLORE <i aria-hidden="true">↓</i></button></div>
     </section>
 
     <section class="metrics-band" aria-label="Franchise highlights">
@@ -76,7 +78,24 @@
       </div>
     </section>
 
-    <section class="section-pad opportunity-section" id="opportunity">
+    <section class="details-toggle-section">
+      <div class="container">
+        <button class="details-toggle-bar toggle-details-btn" type="button" aria-expanded="false" aria-controls="franchise-details">
+          <div class="toggle-bar-left">
+            <span class="toggle-badge">FRANCHISE DETAILS</span>
+            <strong>Opportunity, Trizen Technology, Investment &amp; How It Works</strong>
+          </div>
+          <div class="toggle-bar-action">
+            <span class="btn-text">Know more</span>
+            <span class="toggle-icon" aria-hidden="true">↓</span>
+          </div>
+        </button>
+      </div>
+    </section>
+
+    <!-- Collapsible Franchise Details (Opportunity, Why SleepSync, Investment, How It Works) -->
+    <div id="franchise-details" class="details-collapse" aria-hidden="true">
+      <section class="section-pad opportunity-section" id="opportunity">
       <div class="container split-heading reveal">
         <div><p class="eyebrow">THE OPPORTUNITY</p><h2>Your showroom already has<br><span>the foundations.</span></h2></div>
         <p class="section-intro">Your space, your footfall and your delivery capability can help create a focused sleep destination—without starting a completely separate retail operation.</p>
@@ -151,6 +170,16 @@
         </div>
       </div>
     </section>
+
+    <div class="details-collapse-footer">
+        <div class="container footer-actions-inner">
+          <button class="button button-ghost-dark toggle-details-btn" type="button" aria-expanded="true" aria-controls="franchise-details">
+            <span class="btn-text">Close franchise details</span> <span class="toggle-icon" aria-hidden="true">↑</span>
+          </button>
+          <a class="button button-primary" href="#enquiry">Proceed to enquiry form <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </div>
 
     <section class="enquiry-section section-pad" id="enquiry">
       <div class="container enquiry-grid">
