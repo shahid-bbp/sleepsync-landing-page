@@ -35,3 +35,8 @@
 .form-progress{overflow-x:auto;scrollbar-width:none}
 .form-progress::-webkit-scrollbar{display:none}
 .progress-step{cursor:pointer;white-space:nowrap}
+
+/* Brand Logo */
+.brand-logo{height:40px;width:auto;max-width:190px;object-fit:contain;display:block;transition:transform .2s}
+.brand:hover .brand-logo{transform:scale(1.02)}
+@media(max-width:760px){.brand-logo{height:32px;max-width:150px}}

@@ -6,7 +6,7 @@ Pure HTML, CSS and JavaScript. No framework, bundler or npm dependencies.
 - `index.html` — page content, SEO metadata, navigation and enquiry form
 - `styles.css` — responsive layout, visual styling, animation and mobile menu
 - `script.js` — mobile navigation, scroll header, reveal effects and multi-step form validation
-- `assets/` — optimized WebP images (under 100 KB) and SVG illustrations
+- `assets/` — official SleepSync brand logos, optimized WebP images (under 100 KB) and SVG assets
 
 ## Preview locally
 Open `index.html` in a browser, or use the VS Code Live Server extension.
