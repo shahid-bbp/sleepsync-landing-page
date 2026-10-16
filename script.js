@@ -9,6 +9,7 @@
   const steps = [...document.querySelectorAll('.form-step')];
   const progress = [...document.querySelectorAll('.progress-step')];
   let currentStep = 1;
+  let submitting = false;
 
   if (year) year.textContent = new Date().getFullYear();
 
@@ -139,46 +140,64 @@
     if (window.scrollY > cardTop + 150) window.scrollTo({ top: cardTop, behavior: 'smooth' });
   }
 
+  function showMessage(text, kind = 'error') {
+    message.textContent = text;
+    message.className = `form-message show ${kind}`;
+  }
+
   function validateStep(step) {
     const panel = steps.find(item => Number(item.dataset.step) === step);
     if (!panel) return true;
-    const fields = [...panel.querySelectorAll('input,select,textarea')].filter(el => el.type !== 'checkbox' && el.type !== 'radio');
+    const fields = [...panel.querySelectorAll('input,select,textarea')];
+    const businessChoices = [...panel.querySelectorAll('[name="currentBusiness"]')];
+    if (businessChoices.length) {
+      businessChoices[0].setCustomValidity(businessChoices.some(field => field.checked)
+        ? '' : 'Please select at least one current business category.');
+    }
     for (const field of fields) {
+      if (field.type !== 'checkbox' && field.type !== 'radio') {
+        field.setCustomValidity('');
+        if (field.required && !field.value.trim()) {
+          field.setCustomValidity('Please complete this required field.');
+        } else if (field.maxLength > 0 && new TextEncoder().encode(field.value).length > field.maxLength) {
+          field.setCustomValidity('Please shorten this field. The text exceeds the allowed length.');
+        } else if (field.type === 'tel' && field.value.replace(/\D/g, '').length < 8) {
+          field.setCustomValidity('Please enter a phone number with at least 8 digits.');
+        }
+      }
       if (!field.checkValidity()) {
-        field.reportValidity();
+        showStep(step);
+        showMessage(field.validationMessage);
         field.focus();
+        field.reportValidity();
         return false;
       }
-    }
-    if (step === 4 && !document.querySelector('#consent')?.checked) {
-      document.querySelector('#consent')?.focus();
-      message.textContent = 'Please confirm the declaration and provide consent before submitting.';
-      message.className = 'form-message show error';
-      return false;
     }
     return true;
   }
 
-  document.querySelectorAll('[data-next]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (validateStep(currentStep)) {
-        showStep(Math.min(currentStep + 1, steps.length));
+  function goToStep(target) {
+    if (submitting || target === currentStep) return;
+    if (target > currentStep) {
+      for (let step = 1; step < target; step += 1) {
+        if (!validateStep(step)) return;
       }
-    });
-  });
+    }
+    showStep(target);
+  }
 
+  document.querySelectorAll('[data-next]').forEach(btn => {
+    btn.addEventListener('click', () => goToStep(Math.min(currentStep + 1, steps.length)));
+  });
   document.querySelectorAll('[data-back]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      showStep(Math.max(currentStep - 1, 1));
-    });
+    btn.addEventListener('click', () => goToStep(Math.max(currentStep - 1, 1)));
   });
-
   progress.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const target = Number(tab.dataset.progress);
-      if (target === currentStep) return;
-      if (target < currentStep || validateStep(currentStep)) {
-        showStep(target);
+    tab.addEventListener('click', () => goToStep(Number(tab.dataset.progress)));
+    tab.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        goToStep(Number(tab.dataset.progress));
       }
     });
   });
@@ -205,50 +224,87 @@
 
   form?.addEventListener('submit', async event => {
     event.preventDefault();
-    if (!validateStep(4)) return;
-    const formData = new FormData(form);
-    const data = {};
-    for (const [key, val] of formData.entries()) {
-      if (data[key]) {
-        if (Array.isArray(data[key])) {
-          data[key].push(val);
-        } else {
-          data[key] = [data[key], val];
-        }
-      } else {
-        data[key] = val;
-      }
+    if (submitting) return;
+    for (let step = 1; step <= steps.length; step += 1) {
+      if (!validateStep(step)) return;
     }
-    data.consent = document.querySelector('#consent')?.checked || false;
-
-    const endpoint = form.dataset.endpoint;
-    if (!endpoint) {
-      const randomRef = 'SS/KL/EQ/' + Math.floor(1000 + Math.random() * 9000);
-      message.innerHTML = `<strong>Enquiry captured (Demo Mode)</strong><br>Reference: <code>${randomRef}</code><br>Thank you, ${data.fullName || 'Partner'}. All sections (A–E) verified. Configure <code>data-endpoint</code> on <code>&lt;form&gt;</code> to send directly to your CRM/backend.`;
-      message.className = 'form-message show success';
+    let endpoint;
+    try {
+      endpoint = new URL(form.dataset.endpoint);
+      if (endpoint.protocol !== 'https:' || endpoint.username || endpoint.password) throw new Error();
+    } catch {
+      showMessage('The enquiry service is unavailable. Please email web@thesleepsync.in.');
       return;
     }
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    data.currentBusiness = formData.getAll('currentBusiness');
+    data.consent = form.querySelector('#consent').checked;
+
     const submitButton = form.querySelector('button[type="submit"]');
     const originalText = submitButton.innerHTML;
-    submitButton.disabled = true;
-    submitButton.textContent = 'Submitting…';
+    const controls = [...form.elements].map(element => [element, element.disabled]);
+    submitting = true;
+    controls.forEach(([element]) => { element.disabled = true; });
+    progress.forEach(tab => tab.setAttribute('aria-disabled', 'true'));
+    form.setAttribute('aria-busy', 'true');
+    submitButton.textContent = 'Submitting?';
+    showMessage('Sending your enquiry. Please keep this page open.', 'pending');
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 65000);
+    let invalidField = null;
     try {
-      const response = await fetch(endpoint, {
+      const response = await fetch(endpoint.href, {
         method: 'POST',
+        mode: 'cors',
+        credentials: 'omit',
+        redirect: 'error',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
+        signal: controller.signal
       });
-      if (!response.ok) throw new Error('Submission failed');
+      let result;
+      try {
+        result = await response.json();
+      } catch {
+        throw new Error('We could not confirm submission. Please contact web@thesleepsync.in before retrying. Your details are still on this page.');
+      }
+      if (response.status !== 200 || result?.ok !== true || result.code !== 'SMTP_ACCEPTED' ||
+          !/^SS-[A-F0-9]{16}$/.test(result.reference || '')) {
+        if (response.status === 422 && result?.errors && typeof result.errors === 'object') {
+          const fieldName = Object.keys(result.errors).find(name => [...form.elements].some(el => el.name === name));
+          invalidField = [...form.elements].find(el => el.name === fieldName);
+          if (invalidField) showStep(Number(invalidField.closest('.form-step').dataset.step));
+          throw new Error(typeof result.errors[fieldName] === 'string' ? result.errors[fieldName] : 'Please review the form and try again.');
+        }
+        if (response.status === 429) {
+          const retry = Number(response.headers.get('Retry-After'));
+          throw new Error(Number.isFinite(retry) && retry > 0
+            ? `Too many attempts. Please wait ${Math.ceil(retry / 60)} minute(s), or email web@thesleepsync.in.`
+            : 'Too many attempts. Please wait before trying again, or email web@thesleepsync.in.');
+        }
+        throw new Error(typeof result?.message === 'string' && result.message.length <= 500
+          ? result.message : 'We could not confirm submission. Please contact web@thesleepsync.in before retrying.');
+      }
       form.reset();
+      if (whatsappInput) whatsappInput.readOnly = false;
       showStep(1);
-      message.textContent = 'Thank you. Your franchise enquiry has been submitted successfully.';
-      message.className = 'form-message show success';
+      showMessage(`Thank you. Your enquiry has been accepted by our email service. Reference: ${result.reference}.`, 'success');
     } catch (error) {
-      message.textContent = 'We could not submit your enquiry. Please try again later or contact SleepSync directly.';
-      message.className = 'form-message show error';
+      const networkFailure = error.name === 'AbortError' || error instanceof TypeError;
+      showMessage(networkFailure
+        ? 'We could not confirm submission because the connection failed or timed out. Your details are still on this page. Please contact web@thesleepsync.in before retrying.'
+        : error.message);
     } finally {
-      submitButton.disabled = false;
+      clearTimeout(timeout);
+      submitting = false;
+      controls.forEach(([element, wasDisabled]) => { element.disabled = wasDisabled; });
+      progress.forEach(tab => tab.removeAttribute('aria-disabled'));
+      form.removeAttribute('aria-busy');
       submitButton.innerHTML = originalText;
+      if (invalidField) invalidField.focus();
+      else message.focus({ preventScroll: true });
+      message.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
     }
   });
 })();

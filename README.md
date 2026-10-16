@@ -1,22 +1,37 @@
 # SleepSync Signature Store Franchise Landing Page
 
-Pure HTML, CSS and JavaScript. No framework, bundler or npm dependencies.
+The existing HTML/CSS/JavaScript site now submits its four-step enquiry form to a PHP + PHPMailer backend on Hostinger. Design, branding and existing fields are retained.
+
+- Current frontend: `https://shahid-bbp.github.io/sleepsync-landing-page/`
+- Configured API: `https://thesleepsync.in/api/submit-enquiry.php`
+- Later, upload the frontend to `https://thesleepsync.in` alongside the API.
+
+## Setup
+
+Follow [the Hostinger deployment guide](docs/HOSTINGER-PHP-DEPLOYMENT.md) to upload the bundled PHPMailer backend and create private SMTP configuration. Composer and SSH are not required on Hostinger. The template contains placeholders only; never commit the private config.
+
+The frontend shows success only after a valid SMTP acceptance response, retains inputs on errors and prevents concurrent clicks. The API validates every field, escapes HTML email, restricts origins, enforces HTTPS, applies honeypot and rate limits, and suppresses duplicate messages. SMTP acceptance does not prove inbox receipt.
+
+**Live deployment and receipt in `web@thesleepsync.in` remain required before production acceptance.** No live email delivery has been claimed. Review the [testing checklist and troubleshooting](docs/TESTING.md).
 
 ## Files
-- `index.html` — page content, SEO metadata, navigation and enquiry form
-- `styles.css` — responsive layout, visual styling, animation and mobile menu
-- `script.js` — mobile navigation, scroll header, reveal effects and multi-step form validation
-- `assets/` — official SleepSync brand logos, optimized WebP images (under 100 KB) and SVG assets
 
-## Preview locally
-Open `index.html` in a browser, or use the VS Code Live Server extension.
+- `index.html`, `styles.css`, `script.js`, `assets/`: static frontend.
+- `backend-php/public_html/api/`: PHP endpoint, helpers, bundled PHPMailer and server rules.
+- `backend-php/config/sleepsync-config.example.php`: safe template for a private server file.
+- `tests/`: isolated PHP/SMTP and browser regression checks; never deploy.
+- `tools/package-deployment.py`: creates separate frontend and backend upload archives.
 
-## Important before production
-The enquiry form is intentionally in demo mode. It validates the fields, but does not send or save submissions until a secure backend/form endpoint is configured. Add the endpoint to the form as a `data-endpoint` attribute, for example:
-`<form id="franchise-form" data-endpoint="https://your-domain.example/api/franchise-enquiries" novalidate>`
-The endpoint must accept a JSON POST and should validate fields server-side, apply spam protection/rate limiting, securely store the lead, and notify the franchise team. Do not put private API keys in `script.js`.
+## Local checks and packaging
 
-Replace the illustrative SVG art with approved SleepSync product/showroom photographs before launch. Verify all commercial claims and financial figures against the current franchise offer document. Add the real privacy-policy URL and configure a canonical URL / social share image for the production domain.
+```text
+node --check script.js
+python tests/backend-integration.py path/to/php
+npm install --prefix .tools/browser --no-save playwright
+node tests/browser.cjs
+python tools/package-deployment.py
+```
 
-## Deploy
-Upload the folder to any static host (Netlify, Vercel, GitHub Pages or traditional hosting). No build command is needed; publish the folder containing `index.html`.
+The backend tests require PHP 8.2+ with OpenSSL and Python 3.9+. Browser tests use local Chrome by default (`TEST_BROWSER=msedge` selects Edge) and mock all API calls. Tests do not send live email. Preview the frontend with VS Code Live Server; production CORS deliberately excludes localhost. Use the browser harness for local submissions.
+
+Keep backend files out of the static publication. `_config.yml` excludes them from GitHub Pages' default Jekyll build; custom workflows should publish only the generated frontend package contents.

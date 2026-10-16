@@ -196,7 +196,13 @@
             <span class="progress-step" data-progress="4" role="tab" aria-selected="false" tabindex="0">04 Investment &amp; Consent</span>
           </div>
 
-          <form id="franchise-form" novalidate>
+          <form id="franchise-form" method="post" action="https://thesleepsync.in/api/submit-enquiry.php"
+                data-endpoint="https://thesleepsync.in/api/submit-enquiry.php" novalidate>
+            <div class="form-honeypot" aria-hidden="true" inert>
+              <label for="website">Leave this field empty</label>
+              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" maxlength="200">
+            </div>
+            <noscript><p class="form-message show error">Please enable JavaScript to submit this form, or email web@thesleepsync.in.</p></noscript>
             <!-- ================= STEP 1: SECTION A - ABOUT YOU ================= -->
             <div class="form-step active" data-step="1">
               <span class="section-tag">Section A · About You</span>
@@ -206,22 +212,22 @@
               <div class="field-row">
                 <div class="field">
                   <label for="fullName">Full name <span>*</span></label>
-                  <input id="fullName" name="fullName" autocomplete="name" required placeholder="Your full name">
+                  <input id="fullName" name="fullName" maxlength="120" autocomplete="name" required placeholder="Your full name">
                 </div>
                 <div class="field">
                   <label for="designation">Designation <span>*</span></label>
-                  <input id="designation" name="designation" required placeholder="e.g. Proprietor / Managing Partner">
+                  <input id="designation" name="designation" maxlength="120" required placeholder="e.g. Proprietor / Managing Partner">
                 </div>
               </div>
 
               <div class="field-row">
                 <div class="field">
                   <label for="mobile">Mobile number <span>*</span></label>
-                  <input id="mobile" name="mobile" type="tel" inputmode="tel" autocomplete="tel" required pattern="[+0-9() -]{8,18}" placeholder="+91 98765 43210">
+                  <input id="mobile" name="mobile" maxlength="18" type="tel" inputmode="tel" autocomplete="tel" required pattern="[\+0-9\(\) \-]{8,18}" placeholder="+91 98765 43210">
                 </div>
                 <div class="field">
                   <label for="whatsapp">WhatsApp number <span>*</span></label>
-                  <input id="whatsapp" name="whatsapp" type="tel" inputmode="tel" required pattern="[+0-9() -]{8,18}" placeholder="+91 98765 43210">
+                  <input id="whatsapp" name="whatsapp" maxlength="18" type="tel" inputmode="tel" required pattern="[\+0-9\(\) \-]{8,18}" placeholder="+91 98765 43210">
                   <label class="helper-check" for="sameWhatsapp">
                     <input type="checkbox" id="sameWhatsapp">
                     <span>Same as mobile number</span>
@@ -232,11 +238,11 @@
               <div class="field-row">
                 <div class="field">
                   <label for="email">Email address <span>*</span></label>
-                  <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@business.com">
+                  <input id="email" name="email" maxlength="254" type="email" autocomplete="email" required placeholder="you@business.com">
                 </div>
                 <div class="field">
                   <label for="businessName">Business name <span>*</span></label>
-                  <input id="businessName" name="businessName" autocomplete="organization" required placeholder="Showroom / Company name">
+                  <input id="businessName" name="businessName" maxlength="180" autocomplete="organization" required placeholder="Showroom / Company name">
                 </div>
               </div>
 
@@ -253,24 +259,24 @@
 
               <div class="field">
                 <label for="address">Address <span>*</span></label>
-                <input id="address" name="address" autocomplete="street-address" required placeholder="Showroom / Office physical address">
+                <input id="address" name="address" maxlength="500" autocomplete="street-address" required placeholder="Showroom / Office physical address">
               </div>
 
               <div class="field-row">
                 <div class="field">
                   <label for="town">Town / City <span>*</span></label>
-                  <input id="town" name="town" required placeholder="e.g. Kochi">
+                  <input id="town" name="town" maxlength="120" required placeholder="e.g. Kochi">
                 </div>
                 <div class="field">
                   <label for="district">District <span>*</span></label>
-                  <input id="district" name="district" required placeholder="e.g. Ernakulam">
+                  <input id="district" name="district" maxlength="120" required placeholder="e.g. Ernakulam">
                 </div>
               </div>
 
               <div class="field-row">
                 <div class="field">
                   <label for="gstin">GSTIN</label>
-                  <input id="gstin" name="gstin" placeholder="15-digit GSTIN (optional if not registered)">
+                  <input id="gstin" name="gstin" maxlength="15" placeholder="15-digit GSTIN (optional if not registered)">
                 </div>
                 <div class="field">
                   <label for="yearsInBusiness">Years in business <span>*</span></label>
@@ -305,13 +311,13 @@
                 <div class="field">
                   <label for="showroomArea">Showroom area <span>*</span></label>
                   <div class="input-with-unit">
-                    <input id="showroomArea" name="showroomArea" type="number" min="0" required placeholder="e.g. 4500">
+                    <input id="showroomArea" name="showroomArea" type="number" min="0" max="10000000" step="1" required placeholder="e.g. 4500">
                     <span class="unit">sq ft</span>
                   </div>
                 </div>
                 <div class="field">
                   <label for="staffCount">Number of staff <span>*</span></label>
-                  <input id="staffCount" name="staffCount" type="number" min="0" required placeholder="e.g. 8">
+                  <input id="staffCount" name="staffCount" type="number" min="0" max="1000000" step="1" required placeholder="e.g. 8">
                 </div>
               </div>
 
@@ -327,7 +333,7 @@
 
               <div class="field">
                 <label for="mattressBrands">Mattress brands sold now</label>
-                <input id="mattressBrands" name="mattressBrands" placeholder="Brands currently retailed (or 'None')">
+                <input id="mattressBrands" name="mattressBrands" maxlength="500" placeholder="Brands currently retailed (or 'None')">
               </div>
 
               <div class="field-row">
@@ -371,20 +377,20 @@
 
               <div class="field">
                 <label for="spaceAddress">Address of space</label>
-                <input id="spaceAddress" name="spaceAddress" placeholder="Address / Landmark (or 'Same as showroom')">
+                <input id="spaceAddress" name="spaceAddress" maxlength="500" placeholder="Address / Landmark (or 'Same as showroom')">
               </div>
 
               <div class="field-row">
                 <div class="field">
                   <label for="proposedArea">Area available <span>*</span></label>
                   <div class="input-with-unit">
-                    <input id="proposedArea" name="proposedArea" type="number" min="0" required placeholder="e.g. 800 (suggested 600–1,000)">
+                    <input id="proposedArea" name="proposedArea" type="number" min="0" max="10000000" step="1" required placeholder="e.g. 800 (suggested 600–1,000)">
                     <span class="unit">sq ft</span>
                   </div>
                 </div>
                 <div class="field">
                   <label for="floor">Floor <span>*</span></label>
-                  <input id="floor" name="floor" required placeholder="e.g. Ground Floor / 1st Floor">
+                  <input id="floor" name="floor" maxlength="120" required placeholder="e.g. Ground Floor / 1st Floor">
                 </div>
               </div>
 
@@ -398,13 +404,13 @@
                 </div>
                 <div class="field">
                   <label for="leaseYears">Lease years remaining</label>
-                  <input id="leaseYears" name="leaseYears" placeholder="e.g. 5 years (or N/A if owned)">
+                  <input id="leaseYears" name="leaseYears" maxlength="120" placeholder="e.g. 5 years (or N/A if owned)">
                 </div>
               </div>
 
               <div class="field">
                 <label for="territory">Territory of interest <span>*</span></label>
-                <input id="territory" name="territory" required placeholder="e.g. Ernakulam Central, Calicut, Thrissur">
+                <input id="territory" name="territory" maxlength="200" required placeholder="e.g. Ernakulam Central, Calicut, Thrissur">
               </div>
 
               <div class="form-step-actions">
@@ -478,7 +484,7 @@
 
               <div class="field">
                 <label for="comments">Questions or comments</label>
-                <textarea id="comments" name="comments" rows="3" placeholder="Tell us anything else we should know about your showroom or timeline"></textarea>
+                <textarea id="comments" name="comments" maxlength="3000" rows="3" placeholder="Tell us anything else we should know about your showroom or timeline"></textarea>
               </div>
 
               <div class="consent-box">
@@ -497,7 +503,7 @@
               <p class="form-privacy">Submitting this form is an expression of interest only and creates no obligation on either party.</p>
             </div>
 
-            <div class="form-message" id="form-message" role="status" aria-live="polite"></div>
+            <div class="form-message" id="form-message" role="status" aria-live="polite" aria-atomic="true" tabindex="-1"></div>
           </form>
         </div>
       </div>

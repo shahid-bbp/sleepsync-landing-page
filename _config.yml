@@ -1,0 +1,9 @@
+# For GitHub Pages' default Jekyll build: only frontend assets belong in the site.
+# A custom Actions workflow must likewise publish only the frontend files.
+exclude:
+  - backend-php
+  - docs
+  - tests
+  - tools
+  - README.md
+  - node_modules

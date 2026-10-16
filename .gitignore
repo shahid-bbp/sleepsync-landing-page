@@ -1,0 +1,14 @@
+# Private configuration, generated tools and runtime data
+**/sleepsync-config.php
+.env
+.env.*
+!.env.example
+backend-php/data/
+backend-php/private/
+**/vendor/
+*.log
+.tools/
+.test-output/
+node_modules/
+dist/
+*.zip
