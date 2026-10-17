@@ -289,7 +289,7 @@
       form.reset();
       if (whatsappInput) whatsappInput.readOnly = false;
       showStep(1);
-      showMessage(`Thank you. Your enquiry has been accepted by our email service. Reference: ${result.reference}.`, 'success');
+      showMessage(`Thank you! Your franchise enquiry has been submitted successfully.`, 'success');
     } catch (error) {
       const networkFailure = error.name === 'AbortError' || error instanceof TypeError;
       showMessage(networkFailure

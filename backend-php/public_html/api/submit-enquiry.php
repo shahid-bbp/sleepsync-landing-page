@@ -102,7 +102,7 @@ try {
     $fingerprint = hash_hmac('sha256', json_encode($clean, JSON_THROW_ON_ERROR), $config['smtp_password']);
     $previous = claimEnquiry($config, $fingerprint, $reference);
     if ($previous !== null) {
-        respond(200, 'SMTP_ACCEPTED', 'Your enquiry was already accepted by our email service.', ['reference' => $previous['reference']]);
+        respond(200, 'SMTP_ACCEPTED', 'Your enquiry has already been submitted successfully.', ['reference' => $previous['reference']]);
     }
     [$html, $plain] = enquiryEmail($clean, $reference, gmdate('Y-m-d H:i:s') . ' UTC');
     try {
@@ -133,7 +133,7 @@ try {
         respond(502, 'EMAIL_SEND_FAILED', 'We could not confirm email submission. Your details are retained on this page. Please contact web@thesleepsync.in before retrying.');
     }
     finishEnquiry($config, $fingerprint);
-    respond(200, 'SMTP_ACCEPTED', 'Your enquiry has been accepted by our email service.', ['reference' => $reference]);
+    respond(200, 'SMTP_ACCEPTED', 'Thank you! Your franchise enquiry has been submitted successfully.', ['reference' => $reference]);
 } catch (ApiProblem $error) {
     if ($error->retryAfter > 0) header('Retry-After: ' . $error->retryAfter);
     respond($error->status, $error->apiCode, $error->getMessage());

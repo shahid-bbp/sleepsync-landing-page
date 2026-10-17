@@ -18,7 +18,7 @@ $htmlContent = <<<HTML
     
     <!-- Header -->
     <div style="background:#173c8f;padding:28px 32px;color:#ffffff;">
-      <h1 style="margin:0 0 6px 0;font-size:24px;font-weight:700;letter-spacing:-0.02em;">SleepSync</h1>
+      <h1 style="margin:0 0 6px 0;font-size:24px;font-weight:700;letter-spacing:-0.02em;">sleepsync</h1>
       <p style="margin:0;font-size:15px;color:#d5e2ff;">Franchise Expression of Interest</p>
     </div>
 
